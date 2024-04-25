@@ -1,0 +1,303 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:'Open Sans' , sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url(kosarlabda.jpg) no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+}
+
+.logo {
+    font-size: 2em;
+    color:darkorange;
+    user-select: none;
+}
+
+.navigation a {
+    position: relative;
+    font-size: 1.2em;
+    color: darkorange;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+}
+
+
+.navigation a::after {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 3px;
+    background: darkorange;
+    border-radius: 5px;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform .7s;
+}
+
+.navigation a:hover::after {
+    transform-origin: right;
+    transform: scaleX(1);
+}
+
+
+.wrapper {
+    position: relative;
+    width: 400px;
+    height: 440px;
+    background: transparent;
+    border: 2px solid darkorange;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px darkorange;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: height .2s ease;
+    overflow: hidden; 
+   
+}
+
+.wrapper .form-box {
+    width: 100%;
+    padding: 40px;
+}
+
+.wrapper2 {
+    position: relative;
+    width: 400px;
+
+    background: transparent;
+    border: 2px solid darkorange;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px darkorange;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: height .2s ease;
+    overflow: hidden; 
+    height: fit-content;
+   
+}
+
+.wrapper2 .form-box {
+    width: 100%;
+    padding: 40px;
+}
+
+.form-box h2{
+    font-size: 2em;
+    color: darkorange;
+    text-align: center;
+}
+
+.input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    border-bottom: 2px solid darkorange;
+    margin: 30px 0;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: darkorange;
+    font-weight: 500;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-box input:focus~label,
+.input-box input:valid~label {
+    top: -5px;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    color: darkorange;
+    font-weight: 600;
+    padding: 0 35px 0 5px;
+}
+
+.input-box .icon {
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    color: darkorange;
+    line-height: 57px;
+}
+
+.remember {
+    font-size: .9em;
+    color: darkorange;
+    font-weight: 500;
+    margin: -15px 0 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.remember label input{
+    accent-color: darkorange;
+    margin-right: 3px;
+}
+
+.remember a {
+    color: darkorange;
+    text-decoration: none;
+}
+
+.remember a:hover {
+    text-decoration: underline;
+}
+
+.gomb {
+    width: 100%;
+    height: 45px;
+    background: darkorange;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    color: black;
+    margin: 15px 0 10px;
+}
+.nincs-meg-reg {
+    font-size: .9em;
+    color: darkorange;
+    text-align: center;
+    font-weight: 500;
+    margin: 25px 0 10px;
+}
+
+.nincs-meg-reg p a {
+    color: darkorange;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.nincs-meg-reg p a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    padding-bottom: 60px;
+}
+
+.container .content{
+    text-align: center;
+}
+
+.container .content h3{
+    font-size: 30px;
+    color: #333;
+}
+
+.container .content h3 span{
+    background: crimson;
+    color: white;
+    border-radius: 5px;
+    padding: 0 15px;
+}
+
+.container .content h1 span{
+    color: crimson;
+}
+
+.container .content p {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+    color: red;
+}
+
+.container .content .btn{
+    display: inline-block;
+    padding: 10px 30px;
+    font-size: 1.1em;
+    background: gray;
+    color: white;
+    margin: 0 5px;
+}
+
+.container .content .btn:hover{
+    background: crimson;
+}
+
+.form-box select{
+    width: 100%;
+    height: 45px;
+    background: darkorange;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    color: black;
+}
+
+
+.error {
+    background: red;
+    color: black;
+    padding: 10px;
+    width: 95%;
+    border-radius: 5px;
+    margin: 20px auto;
+    cursor: default;
+    font-size: .9em;
+    text-align: center;
+    font-weight: 450px;
+    margin: 25px 0 10px;
+}
+
+.success {
+    background: green;
+    color: black;
+    padding: 10px;
+    width: 95%;
+    border-radius: 5px;
+    margin: 20px auto;
+    cursor: default;
+    font-size: .9em;
+    text-align: center;
+    font-weight: 500;
+    margin: 25x 0 10px;
+}

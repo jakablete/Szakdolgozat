@@ -1,0 +1,141 @@
+/* Reset some default styles for consistency across browsers */
+body,
+h1,
+h2,
+button,
+select {
+    margin: 0;
+    padding: 0;
+}
+
+
+:root{
+    --body-color: #e4e9f7;
+    --sidebar-color: #ffff;
+    --primary-color: #695cfe;
+    --primary-color-light: #f6f5ff;
+    --toggle-color: #ddd;
+    --text-color: #707070;
+
+    --tran-02: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.4s ease;
+    --tran-05: all 0.5s ease;
+}
+
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: var(--sidebar-color);
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-top: 20px;
+}
+h3{
+    color: var(--text-color);
+}
+
+/* Styling for form elements */
+.select-container {
+    margin-top: 20px;
+}
+
+select,
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: var(--body-color);
+    color: var(--text-color);
+}
+
+button {
+    background-color: var(--sidebar-color);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: var(--tran-03);
+    font-size: 1.3rem;
+}
+
+button:hover {
+    color: var(--sidebar-color);
+    background-color: var(--primary-color);
+}
+
+#feedbackMessage {
+    color: #f00;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.cim{
+    color: var(--text-color);
+    align-items: center;
+    justify-content: center;
+}
+
+.cim h1{
+    font-size: 30px;
+}
+
+.stat{
+    display: flex;
+    align-items: center;
+    margin-left: 320px;
+    background-color: var(--sidebar-color);
+    border-radius: 5px;
+    margin-top: 1%;
+    max-width: 800px;
+}
+
+.col{
+    font-size: 40px;
+    margin-bottom: 3%;
+}
+
+ul {
+    list-style-type: none; 
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 5px; 
+}
+.container .teams{
+    background-color: #f00;
+}
+#swapWindow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    z-index: 1000; 
+}
+label{
+    color: var(--text-color);
+
+}
+.playersname{
+    color: var(--text-color);
+}

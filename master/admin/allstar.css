@@ -1,0 +1,50 @@
+:root{
+    --body-color: #e4e9f7;
+    --sidebar-color: #ffff;
+    --primary-color: #695cfe;
+    --primary-color-light: #f6f5ff;
+    --toggle-color: #ddd;
+    --text-color: #707070;
+
+}
+.cim {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-color); /* Primary theme color for headers */
+    background-color: var(--sidebar-color); /* Light theme color for header background */
+    padding: 10px 15px;
+    margin: 20px 20px 10px 20px; /* Specific margin to give space around the headers */
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: var(--tran-04);
+}
+
+.resoult {
+    background-color: var(--primary-color-light); /* Light purple background for the container */
+    border: 2px solid var(--primary-color); /* Border color same as primary */
+    padding: 15px;
+    margin: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+
+.data {
+    font-size: 16px;
+    color: var(--text-color); /* Dark text for readability */
+    background-color: var(--sidebar-color); /* Bright background for contrast */
+    padding: 8px 12px;
+    margin: 5px 20px; /* Slight margin for spacing between entries */
+    border-left: 4px solid var(--primary-color); /* Solid color bar on the left for visual interest */
+    border-radius: 4px; /* Rounded corners for a softer look */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: var(--tran-03);
+}
+
+
+/* No data available style */
+.resoult div.nincs {
+    color: var(--text-color); /* Using text color from root for contrast */
+    font-style: italic;
+    text-align: center;
+}

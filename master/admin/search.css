@@ -1,0 +1,316 @@
+:root{
+    --body-color: #e4e9f7;
+    --sidebar-color: #ffff;
+    --primary-color: #695cfe;
+    --primary-color-light: #f6f5ff;
+    --toggle-color: #ddd;
+    --text-color: #707070;
+
+    --tran-02: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.4s ease;
+    --tran-05: all 0.5s ease;
+}
+
+
+/* Content section */
+form {
+    margin-left: 5% !important;
+    margin-top: 4%;
+}
+.home {
+    padding: 20px;
+    height: 100vh;
+    transition: all 0.3s;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0; 
+    border-radius: 10px; 
+    overflow: hidden; 
+    border: 1px solid black;
+    box-shadow: 8px 8px 8px 0 rgba(112, 112, 112, 0.6);
+}
+.table td {
+    border: 1px solid var(--text-color);
+    padding: 8px;
+    text-align: left;
+    color: var(--text-color);
+    background-color: var(--sidebar-color);
+}
+.table tr .th{
+    background-color: var(--primary-color);
+}
+.table th {
+    border: 1px solid var(--text-color);
+    padding: 8px;
+    text-align: left;
+    color: var(--text-color);
+    background-color: var(--sidebar-color);
+}
+
+.asc, .desc {
+    cursor: pointer;
+}
+
+.search input {
+    width: 90%;
+    padding: 5px;
+    box-sizing: border-box;
+    color: var(--text-color);
+}
+
+.td.search span {
+    cursor: pointer;
+    color: var(--text-color);
+    float: right;
+    background-color: var(--sidebar-color);
+}
+
+#addTeamButton {
+    display: inline-block;
+    background: var(--sidebar-color); 
+    border: none; 
+    color: var(--text-color);
+    padding: 15px 32px; 
+    text-align: center; 
+    text-decoration: none; 
+    display: inline-block; 
+    font-size: 16px;
+    margin: 4px 2px; 
+    cursor: pointer; 
+    border-radius: 6px; 
+    transition: background 0.3s, color 0.3s; 
+    margin-left: 70%;
+}
+b{
+    color: var(--text-color);
+}
+
+#addTeamButton:hover {
+    background: var(--primary-color);
+    color: var(--sidebar-color);
+}
+#playersPopup {
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1050;
+    max-height: 700px;
+    overflow-y: auto;
+}
+.table-header th div {
+    display: flex;
+    align-items: center; 
+    width: 100%; 
+}
+
+.table-header th div b {
+    flex: 1; 
+}
+.table-header th span.asc,
+.table-header th span.desc {
+    color: black; 
+    cursor: pointer;
+    cursor: pointer;
+    display: block;
+}
+
+.active-sort span.asc,
+.active-sort span.desc {
+    color: var(--text-color); 
+}
+#playersPopup .player-info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#playersPopup .player-info-table th, 
+#playersPopup .player-info-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#playersPopup .player-info-table th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+#playersPopup .player-info-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+
+
+
+
+#playersPopup {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    z-index: 1000;
+    width: 700px; /* Fix szélesség */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Árnyékolás hozzáadása */
+    border-radius: 8px; /* Lekerekített sarkok */
+    font-family: Arial, sans-serif; /* Betűtípus beállítása */
+}
+
+#playersPopup ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#playersPopup ul li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px; /* Betűméret */
+}
+
+#playersPopup ul li:last-child {
+    border-bottom: none;
+}
+
+#playersPopup button {
+    background-color: #007BFF; /* Gomb háttérszíne */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px; /* Lekerekített gomb sarkok */
+    display: block; /* Tegyük blokkszintűvé, hogy a szülő közepén jelenjen meg */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#playersPopup button:hover {
+    background-color: #0056b3; /* Gomb hover állapot */
+}
+#editPlayerPopup{
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    z-index: 1000;
+    width: 300px; /* Fix szélesség */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Árnyékolás hozzáadása */
+    border-radius: 8px; /* Lekerekített sarkok */
+    font-family: Arial, sans-serif; /* Betűtípus beállítása */
+    height: 300px;
+}
+#editPlayerPopup button{
+    background-color: #007BFF; /* Gomb háttérszíne */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px; /* Lekerekített gomb sarkok */
+    display: block; /* Tegyük blokkszintűvé, hogy a szülő közepén jelenjen meg */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#addPlayerPopup button:hover{
+    background-color: #0056b3; /* Gomb hover állapot */
+}
+#addPlayerPopup{
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    z-index: 1000;
+    width: 300px; /* Fix szélesség */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Árnyékolás hozzáadása */
+    border-radius: 8px; /* Lekerekített sarkok */
+    font-family: Arial, sans-serif; /* Betűtípus beállítása */
+    height: 300px;
+}
+#addPlayerPopup button{
+    background-color: #007BFF; /* Gomb háttérszíne */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px; /* Lekerekített gomb sarkok */
+    display: block; /* Tegyük blokkszintűvé, hogy a szülő közepén jelenjen meg */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#addPlayerPopup button:hover{
+    background-color: #0056b3; /* Gomb hover állapot */
+}
+.modal {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--sidebar-color); /* Fehér háttér */
+    border: 1px solid #ccc;
+    padding: 20px;
+    z-index: 1000;
+    width: 800px; /* Szélesség beállítása */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+}
+
+.modal .modal-content {
+    background: var(--primary-color-light); /* Világos háttér a tartalomnak */
+}
+
+.modal .modal-header {
+    padding: 10px 15px;
+    background: var(--primary-color); /* Sötétkék háttér a fejlécnek */
+    color: var(--sidebar-color);
+    border-bottom: 1px solid #ddd;
+}
+
+.modal .modal-header .close {
+    float: right;
+    font-size: 1.5rem;
+    line-height: 1rem;
+    cursor: pointer;
+    color: var(--sidebar-color);
+}
+
+.modal .modal-body {
+    background: var(--body-color); /* Világos háttér a tartalomnak */
+    color: var(--text-color); /* Szöveg színe */
+    overflow-y: auto; /* Gördülő sáv, ha szükséges */
+}
+
+.modal .modal-footer {
+    padding: 10px 15px;
+    background: var(--primary-color-light); /* Világos háttér a láblécnek */
+    border-top: 1px solid #ddd;
+    text-align: right;
+}
+
+
+/* Ha a modal megjelenik, ez a stílus változtatja meg a láthatóságot */
+.modal.show {
+    display: block;
+}
