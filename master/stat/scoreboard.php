@@ -93,13 +93,15 @@ function displayPlayersByTeam($conn, $teamId, $isActive, $teamType) {
 
 
 function generatePlayerOptions($conn, $teamId, $isActive) {
-    $sql = "SELECT player_id, player_name FROM players WHERE team_id = ? AND active = ?";
+    //$sql = "SELECT player_id, player_name FROM players WHERE team_id = ? AND active = ?";
+    $sql = "SELECT player_id, player_name, active FROM players WHERE team_id = ? ORDER BY active ".($isActive ? 'DESC' : 'ASC').", player_id ASC";
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("ii", $teamId, $isActive);
+        //$stmt->bind_param("ii", $teamId, $isActive);
+        $stmt->bind_param("i", $teamId);
         $stmt->execute();
         $result = $stmt->get_result();
         while ($player = $result->fetch_assoc()) {
-            echo "<option value='" . $player['player_id'] . "'>" . htmlspecialchars($player['player_name']) . "</option>";
+            echo '<option value="' . $player['player_id'] . '"'.($player['active'] == $isActive ? '' : 'hidden').'>' . htmlspecialchars($player['player_name']) . '</option>';
         }
         $stmt->close();
     }
@@ -283,10 +285,20 @@ $awayPlayersResult = $stmt->get_result();
 
 </div>
 <script>
+let unloadWarning = false;
+
 var homeTeamId = <?php echo json_encode($homeTeamId); ?>;
 var awayTeamId = <?php echo json_encode($awayTeamId); ?>;
 var gameId = <?php echo json_encode($_SESSION['game_id'] ?? 0); ?>;
 
+document.addEventListener('DOMContentLoaded', function(ev) {
+	window.addEventListener('beforeunload', function(ev) {
+		if (unloadWarning) {
+			event.preventDefault();
+			event.returnValue = true;
+		}
+	});
+});
 
 
 function performSwap(team) {
@@ -334,11 +346,27 @@ function performSwap(team) {
 
 
 function homeshowSwapWindow() {
-    document.getElementById('homeswapWindow').style.display = 'block';
+	document.querySelectorAll('#homeswapWindow > select#homeActivePlayers > option').forEach((el) => {
+		el.removeAttribute('selected');
+	});
+	document.querySelector('#homeswapWindow > select#homeActivePlayers > option:not([hidden])').setAttribute('selected', 'selected');
+	document.querySelectorAll('#homeswapWindow > select#homeBenchPlayers > option').forEach((el) => {
+		el.removeAttribute('selected');
+	});
+	document.querySelector('#homeswapWindow > select#homeBenchPlayers > option:not([hidden])').setAttribute('selected', 'selected');
+	document.getElementById('homeswapWindow').style.display = 'block';
 }
 
 function awayshowSwapWindow() {
-    document.getElementById('awayswapWindow').style.display = 'block';
+	document.querySelectorAll('#awayswapWindow > select#awayActivePlayers > option').forEach((el) => {
+		el.removeAttribute('selected');
+	});
+	document.querySelector('#awayswapWindow > select#awayActivePlayers > option:not(hidden)').setAttribute('selected', 'selected');
+	document.querySelectorAll('#awayswapWindow > select#awayBenchPlayers > option').forEach((el) => {
+		el.removeAttribute('selected');
+	});
+	document.querySelector('#awayswapWindow > select#awayBenchPlayers > option:not(hidden)').setAttribute('selected', 'selected');
+	document.getElementById('awayswapWindow').style.display = 'block';
 }
 
 function closeSwapWindow() {
@@ -348,14 +376,63 @@ function closeSwapWindow() {
 
 
 function updatePlayerLists(team, data) {
-		let toShowPlayer1 = document.querySelector(`div#teams > div > ul[data-status="1"][data-team-type="${data.teamType}"] > li[data-player-id="${data.activeId}"]`);
-		let toShowPlayer2 = document.querySelector(`div#teams > div > ul[data-status="0"][data-team-type="${data.teamType}"] > li[data-player-id="${data.benchId}"]`);
-		let toHidePlayer1 = document.querySelector(`div#teams > div > ul[data-status="1"][data-team-type="${data.teamType}"] > li[data-player-id="${data.benchId}"]`);
-		let toHidePlayer2 = document.querySelector(`div#teams > div > ul[data-status="0"][data-team-type="${data.teamType}"] > li[data-player-id="${data.activeId}"]`);
-		toShowPlayer1.removeAttribute('hidden');
-		toShowPlayer2.removeAttribute('hidden');
-		toHidePlayer1.setAttribute('hidden', 'hidden');
-		toHidePlayer2.setAttribute('hidden', 'hidden');
+	let updateOperations = [
+		{
+			operator: 'show',
+			player: document.querySelector(`div#teams > div > ul[data-status="1"][data-team-type="${data.teamType}"] > li[data-player-id="${data.activeId}"]`)
+		},
+		{
+			operator: 'show',
+			player: document.querySelector(`div#teams > div > ul[data-status="0"][data-team-type="${data.teamType}"] > li[data-player-id="${data.benchId}"]`)
+		},
+		{
+			operator: 'show',
+			player: document.querySelector(`div#${data.teamType}swapWindow > select#${data.teamType}ActivePlayers > option[value="${data.activeId}"]`)
+		},
+		{
+			operator: 'show',
+			player: document.querySelector(`div#${data.teamType}swapWindow > select#${data.teamType}BenchPlayers > option[value="${data.benchId}"]`)
+		},
+		{
+			operator: 'hide',
+			player: document.querySelector(`div#teams > div > ul[data-status="1"][data-team-type="${data.teamType}"] > li[data-player-id="${data.benchId}"]`)
+		},
+		{
+			operator: 'hide',
+			player: document.querySelector(`div#teams > div > ul[data-status="0"][data-team-type="${data.teamType}"] > li[data-player-id="${data.activeId}"]`)
+		},
+		{
+			operator: 'hide',
+			player: document.querySelector(`div#${data.teamType}swapWindow > select#${data.teamType}ActivePlayers > option[value="${data.benchId}"]`)
+		},
+		{
+			operator: 'hide',
+			player: document.querySelector(`div#${data.teamType}swapWindow > select#${data.teamType}BenchPlayers > option[value="${data.activeId}"]`)
+		},
+	];
+	updateOperations.forEach((op) => {
+		if (op.operator === 'show') {
+			op.player.removeAttribute('hidden');
+		} else {
+			op.player.setAttribute('hidden', 'hidden');
+		}
+	});
+	/*
+	let toShowPlayer1 = document.querySelector(`div#teams > div > ul[data-status="1"][data-team-type="${data.teamType}"] > li[data-player-id="${data.activeId}"]`);
+	let toShowPlayer2 = document.querySelector(`div#teams > div > ul[data-status="0"][data-team-type="${data.teamType}"] > li[data-player-id="${data.benchId}"]`);
+	let toShowPlayer3 = document.querySelector(`div#${data.teamType}swapWindow > select.${data.teamType}ActivePlayers > option[value="${data.activeId}"]`);
+	let toShowPlayer4 = document.querySelector(`div#${data.teamType}swapWindow > select.${data.teamType}BenchPlayers > option[value="${data.benchId}"]`);
+
+	let toHidePlayer1 = document.querySelector(`div#teams > div > ul[data-status="1"][data-team-type="${data.teamType}"] > li[data-player-id="${data.benchId}"]`);
+	let toHidePlayer2 = document.querySelector(`div#teams > div > ul[data-status="0"][data-team-type="${data.teamType}"] > li[data-player-id="${data.activeId}"]`);
+	let toHidePlayer3 = document.querySelector(`div#${data.teamType}swapWindow > select.${data.teamType}ActivePlayers > option[value="${data.benchId}"]`);
+	let toHidePlayer4 = document.querySelector(`div#${data.teamType}swapWindow > select.${data.teamType}BenchPlayers > option[value="${data.activeId}"]`);
+
+	toShowPlayer1.removeAttribute('hidden');
+	toShowPlayer2.removeAttribute('hidden');
+	toHidePlayer1.setAttribute('hidden', 'hidden');
+	toHidePlayer2.setAttribute('hidden', 'hidden');
+	*/
 }
 
 let operations = [];
@@ -500,7 +577,7 @@ function closeGameAndResetPlayers() {
     if (!confirm('Are you sure you want to end the game and reset all player statuses?')) {
         return;
     }
-    
+
 
     fetch('reset_players.php', {
         method: 'POST',
@@ -512,7 +589,9 @@ function closeGameAndResetPlayers() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            window.location.href = '../admin/list.php';
+						unloadWarning = false;
+            //window.location.href = '../admin/list.php';
+            window.location.replace('../admin/list.php');
         } else {
             alert('Failed to reset game: ' + data.message);
         }

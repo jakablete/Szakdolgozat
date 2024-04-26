@@ -126,30 +126,74 @@ while($team = mysqli_fetch_assoc($teamsResult)) {
         <form class="container teams" style="margin-left:40%"  action="scoreboard.php" method="post">
             <div>
                 <h3 for="homeTeam">Hazai csapat:</h3>
-                <select id="homeTeam" name="home_team" required onchange="fetchPlayersForTeam(this.value, 'home')">
+                <select class="team-selector" id="homeTeam" name="home_team" required  data-team-type="home"> <!--onchange="fetchPlayersForTeam(this.value, 'home')"-->
                     <option value="">Válassz hazai csapatot...</option>
-                    <?php foreach($teams as $team) { echo "<option value='" . $team['team_id'] . "'>" . $team['team_name'] . "</option>"; } ?>
+                    <?php foreach($teams as $team): ?>
+                    <option value="<?= $team['team_id'] ?>"><?= $team['team_name'] ?></option>
+                    <?php endforeach ?>
                 </select>
-                <div id="homePlayersList"></div>
+                <div id="homePlayersList" class="playersList"></div>
             </div>
             <div>
                 <h3 for="awayTeam">Vendég csapat:</h3>
-                <select id="awayTeam" name="away_team" required onchange="fetchPlayersForTeam(this.value, 'away')">
+                <select class="team-selector" id="awayTeam" name="away_team" required data-team-type="away"> <!--onchange="fetchPlayersForTeam(this.value, 'away')"-->
                     <option value="">Válassz vendég csapatot...</option>
                     <?php foreach($teams as $team) { echo "<option value='" . $team['team_id'] . "'>" . $team['team_name'] . "</option>"; } ?>
                 </select>
-                <div id="awayPlayersList"></div>
+                <div id="awayPlayersList" class="playersList"></div>
             </div>
-            <button type="submit" id="startMatch">Mérkőzés Indítása</button>
+            <button type="submit" id="startMatch" disabled>Mérkőzés Indítása</button>
         </form>
     </section>
 
 <script>
+document.addEventListener('DOMContentLoaded', function(ev) {
+	let teamSelectors = document.querySelectorAll('select.team-selector');
+	teamSelectors.forEach(function(el, idx) {
+		el.addEventListener('change', function(ev) {
+			fetchPlayersForTeam(parseInt(this.value), this.dataset.teamType);
+		});
+	});
+});
 
+function beforeStartMatch() {
+	let button = document.querySelector('#startMatch');
+	button.disabled = true;
+	let homeTeam = document.querySelector('#homeTeam');
+	let awayTeam = document.querySelector('#awayTeam');
+	if (homeTeam.value && awayTeam.value) {
+		let homeCheckedNum = document.querySelectorAll(`#homePlayersList .playersname > input[type="checkbox"]:checked`);
+		let awayCheckedNum = document.querySelectorAll(`#awayPlayersList .playersname > input[type="checkbox"]:checked`);
+		if (homeCheckedNum.length == 5 && awayCheckedNum.length == 5) {
+			button.disabled = false;
+		}
+	}
+}
+
+function playersNameChange(ev) {
+	let el = ev.target;
+	let container = el.closest('.playersList');
+	let checkedNum = container.querySelectorAll(`.playersname > input[type="checkbox"]:checked`);
+	if (checkedNum.length < 5) {
+		container.querySelectorAll(`.playersname > input[type="checkbox"]`).forEach(function(el, idx) {
+			el.disabled = false;
+		});
+	} else {
+		container.querySelectorAll(`.playersname > input[type="checkbox"]:not(:checked)`).forEach(function(el, idx) {
+			el.disabled = true;
+		});
+	}
+	beforeStartMatch();
+}
 
 function fetchPlayersForTeam(teamId, teamPrefix) {
+		let otherTeamPrefix = teamPrefix === 'home' ? 'away' : 'home';
+		let otherOptions = document.querySelectorAll(`select.team-selector[data-team-type="${otherTeamPrefix}"] > option`);
+		otherOptions.forEach(function(el, idx) { el.disabled = false; });
+
     if (!teamId) {
         document.getElementById(teamPrefix + 'PlayersList').innerHTML = '';
+        beforeStartMatch();
         return;
     }
 
@@ -165,18 +209,32 @@ function fetchPlayersForTeam(teamId, teamPrefix) {
             teamData.forEach(player => {
                 content += `
                     <div class="playersname">
-                        <input type="checkbox" name="${teamPrefix}_players[]" value="${player.player_id}">
+                        <input id="player_${player.player_id}" type="checkbox" name="${teamPrefix}_players[]" value="${player.player_id}">
+                        <label for="player_${player.player_id}">${player.player_name}</label>
                         <input type="hidden" name="${teamPrefix}_team_id[]" value="${teamId}">
-                        ${player.player_name}
                     </div>`;
             });
         } else {
             content += '<div>Nincsenek játékosok.</div>';
         }
+        if (teamId) {
+					let teamInOtherOptions = document.querySelector(`select.team-selector[data-team-type="${otherTeamPrefix}"] > option[value="${teamId}"]`);
+					if (teamInOtherOptions) { teamInOtherOptions.disabled = true; }
+				}
 
+				document.querySelectorAll(`#${teamPrefix}PlayersList > .playersname input[type="checkbox"]`).forEach(function(el, idx) {
+					el.removeEventListener('change', playersNameChange);
+				});
         playersList.innerHTML = content;
+				document.querySelectorAll(`#${teamPrefix}PlayersList > .playersname input[type="checkbox"]`).forEach(function(el, idx) {
+					el.addEventListener('change', playersNameChange);
+				});
+				beforeStartMatch();
     })
-    .catch(error => console.error('Error fetching players:', error));
+    .catch(error => {
+			console.error('Error fetching players:', error);
+			beforeStartMatch();
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
